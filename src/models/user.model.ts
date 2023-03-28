@@ -1,3 +1,5 @@
+import { USER_ROLE } from "src/auth/dtos/signup.dto";
+
 export interface User {
     firstName: string;
     lastName: string;
@@ -5,5 +7,5 @@ export interface User {
     mobileNo: string;
     password: string;
     token: string;
-
+    roles: USER_ROLE[];
 }

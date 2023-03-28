@@ -4,7 +4,7 @@ export class SignUpDTO {
     email: string;
     mobileNo: string;
     password: string;
-    role: USER_ROLE
+    roles: USER_ROLE[];
 
 }
 

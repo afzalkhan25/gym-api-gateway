@@ -14,7 +14,7 @@ export class AuthService {
 
 
     async validateUser(email: string, password: string): Promise<any> {
-        console.log('inside validateUser=>');
+        console.log('inside validateUser=>', email, password);
         const user = await this.getUser(email);
         console.log('user=>', user);
         if (!user) return null;
@@ -28,9 +28,9 @@ export class AuthService {
         return null;
     }
 
-    async login(email: string, password: string) {
-
-        const payload = { email: email, sub: email };
+    async login(user: User) {
+        console.log('inside login=>', user)
+        const payload = { user: user };
         return {
             access_token: this.jwtService.sign(payload),
         };
@@ -42,22 +42,27 @@ export class AuthService {
     async signup(dto: SignUpDTO) {
         try {
             const encryptedPassword = bcrypt.hashSync(dto.password, 10);
-            const res = await this.neo.write(`CREATE (u:User { firstName:"${dto.firstName}",lastName:"${dto.lastName}",mobileNo:"${dto.mobileNo}",email:"${dto.email}",password:"${encryptedPassword}"}) return u;`);
-            if (res.length > 0) {
-                return "account created successfully"
-            }
+
+            const query = `CREATE (u:User {firstName:"${dto.firstName}",lastName:"${dto.lastName}",email:"${dto.email}",
+            mobileNo:"${dto.mobileNo}", password:"${encryptedPassword}"
+        }) SET u.roles = $roles`;
+            const params = { roles: dto.roles };
+            const res = await this.neo.write(query, params);
+            return "account created successfully"
         } catch (error) {
             return new HttpException(error, 503);
         }
-
     }
 
     async getUser(email: string) {
         const res = await this.neo.read(`MATCH (u:User) where u.email=$email return u;`, { email: email });
+        console.log(res);
         if (res.length > 0) {
             let u: User;
+            console.log(res);
             res.map(row => {
-                u = row.get('u').properties as User;
+                console.log('row=>', row);
+                u = row.u as User;
             })
             return u;
         } else {
