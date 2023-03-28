@@ -31,6 +31,17 @@ export class GymController {
     return await this.gymService.findOne(id);
   }
 
+  @Get('/email/:email')
+  async findAllGymForCurrentUser(@Param('email') email: string) {
+    return await this.gymService.findAllGymForCurrentUser(email);
+  }
+
+  @Get('/findaddress/:id')
+  async findGymAddress(@Param('id') email: string) {
+    return await this.gymService.getGymAddress(email);
+  }
+
+
   @Patch('/update/:id')
   async update(@Param('id') id: string, @Body() updateGymDto: UpdateGymDto) {
     return await this.gymService.update(id, updateGymDto);

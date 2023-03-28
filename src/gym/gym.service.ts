@@ -62,6 +62,29 @@ export class GymService {
     }
   }
 
+  async findAllGymForCurrentUser(email: string) {
+    try {
+      console.log(email);
+
+      const res = await this.neo.read(`MATCH (u:User)-[:OWNS]->(g:Gym) where u.email=$email return g;`, { email: email });
+      const gyms: Gym[] = [];
+      res.map(r => gyms.push(r.g));
+      return gyms;
+    } catch (error) {
+      throw new HttpException('error encountered', error);
+    }
+  }
+
+  async getGymAddress(id:string) {
+    try {
+      const res = await this.neo.read(`MATCH (g:Gym) where g.id=$id return g;`, { id:id });
+      const gyms: Gym[] = [];
+      res.map(r => gyms.push(r.g));
+      return gyms;
+    } catch (error) {
+      throw new HttpException('error encountered', error);
+    }
+  }
   async findOne(id: string) {
     try {
       const res = await this.neo.read(`MATCH (g:Gym) WHERE g.id=$id return g`, { id: id });
