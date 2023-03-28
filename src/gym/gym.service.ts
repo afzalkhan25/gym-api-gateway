@@ -86,8 +86,28 @@ export class GymService {
       return g
       `)
       return "gym updated successfully";
-
     } catch (error) {
+      throw new HttpException("error updating gym", error)
+    }
+  }
+
+  async updateAddress(id: string, dto: UpdateGymDto) {
+    try {
+      const res = await this.neo.write(`MATCH (g:Gym {id:"${id}"})-[r:LOCATED_IN]->(a:Address)
+      SET
+      a.line1="${dto.address.line1}",
+      a.line2="${dto.address.line2}",
+      a.locality="${dto.address.locality}",
+      a.city="${dto.address.city}",
+      a.state="${dto.address.state}",
+      a.country="${dto.address.country}",
+      a.pinCode="${dto.address.pinCode}"
+      return a
+      `)
+      console.log(res);
+      return "gym address updated successfully";
+    } catch (error) {
+      console.log(error);
       throw new HttpException("error updating gym", error)
     }
   }

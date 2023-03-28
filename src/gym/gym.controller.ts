@@ -31,10 +31,16 @@ export class GymController {
     return await this.gymService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('/update/:id')
   async update(@Param('id') id: string, @Body() updateGymDto: UpdateGymDto) {
     return await this.gymService.update(id, updateGymDto);
   }
+
+  @Patch('/update/address/:id')
+  async updateAddress(@Param('id') id: string, @Body() updateGymDto: UpdateGymDto) {
+    return await this.gymService.updateAddress(id, updateGymDto);
+  }
+
 
   @Delete(':id')
   remove(@Param('id') id: string) {
