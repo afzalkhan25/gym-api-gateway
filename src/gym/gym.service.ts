@@ -135,7 +135,17 @@ export class GymService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} gym`;
+  async remove(id: string) {
+    try {
+      const res = await this.neo.write(`MATCH (g:Gym) WHERE g.id=$id
+      SET g.deleted=true
+      return g
+      `,{id:id})
+      console.log(res);
+      return "gym deleted successfully";
+    } catch (error) {
+      console.log(error);
+      throw new HttpException("error deleteing gym", error)
+    }
   }
 }

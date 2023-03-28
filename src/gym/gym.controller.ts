@@ -52,9 +52,8 @@ export class GymController {
     return await this.gymService.updateAddress(id, updateGymDto);
   }
 
-
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.gymService.remove(+id);
+    return this.gymService.remove(id);
   }
 }
