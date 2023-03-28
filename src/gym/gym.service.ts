@@ -19,7 +19,6 @@ export class GymService {
       if (gymExists.length > 0) {
         throw new ConflictException("gym exists with the same name for the same user");
       } else {
-
         let id: string;
         const res = await this.neo.write(`CREATE (n:Gym { id: apoc.create.uuid() ,gymName:"${dto.gymName}",
       email:"${dto.email}",panNo:"${dto.panNo}",gstNo:"${dto.gstNo}",aadhar:"${dto.aadhar}"})
@@ -50,16 +49,47 @@ export class GymService {
 
   }
 
-  findAll() {
-    return `This action returns all gym`;
+  async findAll() {
+    try {
+      const res = await this.neo.read(`MATCH (g:Gym) return g`);
+      const gyms: Gym[] = [];
+      res.map(r => {
+        gyms.push(r.g)
+      });
+      return gyms;
+    } catch (error) {
+      throw new HttpException('error encountered', error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} gym`;
+  async findOne(id: string) {
+    try {
+      const res = await this.neo.read(`MATCH (g:Gym) WHERE g.id=$id return g`, { id: id });
+      let gym: Gym;
+      res.map(r => {
+        gym = r.g;
+      });
+      return gym;
+    } catch (error) {
+      throw new HttpException('error encountered', error);
+    }
   }
 
-  update(id: number, updateGymDto: UpdateGymDto) {
-    return `This action updates a #${id} gym`;
+  async update(id: string, dto: UpdateGymDto) {
+    try {
+      const res = await this.neo.write(`MATCH (g:Gym) where g.id="${id}" 
+      SET
+      g.gymName="${dto.gymName}",
+      g.email="${dto.email}",
+      g.panNo="${dto.panNo}",
+      g.aadhar="${dto.aadhar}"
+      return g
+      `)
+      return "gym updated successfully";
+
+    } catch (error) {
+      throw new HttpException("error updating gym", error)
+    }
   }
 
   remove(id: number) {

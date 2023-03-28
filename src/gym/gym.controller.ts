@@ -18,20 +18,22 @@ export class GymController {
     return await this.gymService.create(createGymDto);
   }
 
+  @HasRoles(USER_ROLE.ADMIN)
   @UseGuards(AuthGuard('jwt'))
-  @Get()
-  findAll() {
-    return this.gymService.findAll();
+  @Get('/all')
+  async findAll() {
+    return await this.gymService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.gymService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    console.log(id);
+    return await this.gymService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGymDto: UpdateGymDto) {
-    return this.gymService.update(+id, updateGymDto);
+  async update(@Param('id') id: string, @Body() updateGymDto: UpdateGymDto) {
+    return await this.gymService.update(id, updateGymDto);
   }
 
   @Delete(':id')
