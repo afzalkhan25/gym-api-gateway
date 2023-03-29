@@ -31,4 +31,13 @@ export class MemberController {
   async remove(@Param('id') id: string) {
     return await this.memberService.remove(id);
   }
+
+  
+  uploadPics() {
+    
+  }
+
+  uploadMembers() {
+    
+  }
 }
