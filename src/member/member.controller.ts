@@ -5,8 +5,8 @@ import { UpdateMemberDto } from './dto/update-member.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile } from '@nestjs/common/decorators';
 import { FileTypeValidator, MaxFileSizeValidator, ParseFilePipe } from '@nestjs/common/pipes';
-import { FileHeaderValidator } from './validators/fileheader.validator';
 import { FileExtensionValidator } from './validators/fileextn.validator';
+import { FileHeaderValidator } from './validators/fileheader.validator';
 
 @Controller('member')
 export class MemberController {
@@ -64,19 +64,19 @@ export class MemberController {
   uploadMembers(@UploadedFile(new ParseFilePipe({
     validators: [
       new MaxFileSizeValidator({
-        maxSize: 10000000
+        maxSize: 2000000
       }),
       new FileExtensionValidator({
-        extensions: ['xls', 'csv', 'xlsx']
+        extensions: ['xls', 'xlsx', 'csv']
       }),
       new FileHeaderValidator({
-        headers: ['firstName', 'lastName', 'email', 'mobileNo']
+        headers:['firstName','lastName','email','mobileNo']
       })
     ]
   })) file: Express.Multer.File) {
     console.log(file);
     //todo: service invocation to parse file content and store in database.
-    
+
     return "file uploaded successfully";
 
   }

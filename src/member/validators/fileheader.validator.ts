@@ -1,24 +1,24 @@
-import { FileValidator } from "@nestjs/common/pipes/file/file-validator.interface";
+import { FileValidator } from "@nestjs/common";
 
-export type FileHeaderValidatorOptions = {
-    headers: string[]
+export type FileHeaderOptions = {
+    headers: string[];
 }
-export class FileHeaderValidator extends FileValidator<FileHeaderValidatorOptions> {
-
-    headers: any;
+export class FileHeaderValidator extends FileValidator<FileHeaderOptions>{
+    inputs: any
     constructor(c) {
         super(c);
-        this.headers = c;
+        this.inputs = c;
+        console.log("recieved headers =>", this.inputs);
+    }
+    isValid(file?: any): boolean | Promise<boolean> {
+        //todo: business logic to match header form file with headers recieved from validator class
+        //XLSX package to load the file and read the sheet and work with rows and column
+        
+        console.log(file, this.inputs)
+        return true;
+    }
+    buildErrorMessage(file: any): string {
+        return `error: following headers are missing in the file ${JSON.stringify(this.inputs)}`
     }
 
-    buildErrorMessage(): string {
-        return `error: header is missing`
-    };
-
-    isValid(file: any): boolean {
-        console.log(file);
-        console.log('headers=>', this.headers);
-        //todo: business logic to read headers using XLSX and returning header;
-        return false;
-    };
 }
