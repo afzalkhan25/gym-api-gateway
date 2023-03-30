@@ -49,6 +49,7 @@ export class MemberController {
         maxSize: 2000000
       }),
 
+
     ]
   })) file: Express.Multer.File) {
     console.log(file);
@@ -64,6 +65,9 @@ export class MemberController {
       new MaxFileSizeValidator({
         maxSize: 10000000
       }),
+      new FileHeaderValidator({
+        headers: ['firstName', 'lastName', 'email', 'mobileNo']
+      })
     ]
   })) file: Express.Multer.File) {
     console.log(file);
