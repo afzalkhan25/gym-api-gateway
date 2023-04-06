@@ -39,7 +39,7 @@ export class MemberController {
 
   @Post('/imageupload')
   @UseInterceptors(FileInterceptor('image', {
-    dest: '/images'
+    // dest: '/images'
   }))
   uploadPics(@UploadedFile(new ParseFilePipe({
     validators: [
@@ -47,7 +47,7 @@ export class MemberController {
         fileType: 'image/png'
       }),
       new MaxFileSizeValidator({
-        maxSize: 2000000
+        maxSize: 2000000  
       }),
 
 
@@ -55,6 +55,7 @@ export class MemberController {
   })) file: Express.Multer.File) {
     console.log(file);
     return "image uploaded successfully"
+    
   }
 
   @Post('/bulkupload')
